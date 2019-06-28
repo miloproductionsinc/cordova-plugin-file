@@ -4160,4 +4160,38 @@ exports.defineManualTests = function (contentEl, createActionButton) {
     createActionButton('show-contact-image', function () {
         resolveFsContactImage();
     }, 'contactButton');
+
+    div = document.createElement('h2');
+    div.appendChild(document.createTextNode('Run all tests on cdvfile:// url'));
+    div.setAttribute('align', 'center');
+    contentEl.appendChild(div);
+
+    // On Android OS 4.4 (and maybe 5.0) plugins cannot exec when on a cdvfile:// url
+    // Which results in channels not being fired, and deciveready never firing
+    // See Issue 329 for details https://github.com/apache/cordova-plugin-file/issues/329\
+    // Conveniently, this plugin requires this functionality for onFileSystemPathsReady.
+    div = document.createElement('div');
+    div.setAttribute('align', 'center');
+    div.innerHTML = 'If you see nothing after ' +
+        'clicking the button it is likely because deviceready did not fire.' +
+        '<br>If this is caused by a plugin not firing a channel, ' +
+        '<a href="https://github.com/apache/cordova-plugin-file/issues/329">' +
+        'issue 329</a> may provide some guidance.';
+    contentEl.appendChild(div);
+
+    div = document.createElement('div');
+    div.setAttribute('id', 'cdvfilePageTests');
+    div.setAttribute('align', 'center');
+    contentEl.appendChild(div);
+
+    createActionButton('Open cdvfile:// Page Tests', function () {
+        var path = window.location.pathname.match(/\/www\/.*$/);
+        if (path.length === 1) {
+            path = path[0];
+        } else {
+            path = window.location.pathname;
+        }
+        window.open('cdvfile:///assets' + path);
+    }, 'cdvfilePageTests');
+
 };
